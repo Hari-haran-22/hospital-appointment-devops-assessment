@@ -1,0 +1,125 @@
+name: hospital-appointments
+
+services:
+  db:
+    image: postgres:17.7-alpine@sha256:bb377b7239d2774ac8cc76f481596ce96c5a6b5e9d141f6d0a0ee371a6e7c0f2
+    environment:
+      POSTGRES_DB: appointments
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD_FILE: /run/secrets/db_admin_password
+    secrets:
+      - db_admin_password
+      - db_app_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./infra/init-db.sh:/docker-entrypoint-initdb.d/01-init-db.sh:ro
+      - ./infra/schema.sql:/opt/appointments/schema.sql:ro
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U postgres -d appointments"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+
+  app:
+    image: hospital-appointments:${APP_VERSION:-local}
+    build:
+      context: .
+      target: base
+    environment:
+      APP_VERSION: ${APP_VERSION:-local}
+      DATABASE_HOST: db
+      DATABASE_NAME: appointments
+      DATABASE_USER: appointment_app
+      DATABASE_PASSWORD_FILE: /run/secrets/db_app_password
+      PATIENT_ONE_TOKEN_FILE: /run/secrets/patient_one_token
+      PATIENT_TWO_TOKEN_FILE: /run/secrets/patient_two_token
+      STAFF_TOKEN_FILE: /run/secrets/staff_token
+    secrets:
+      - db_app_password
+      - patient_one_token
+      - patient_two_token
+      - staff_token
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - backend
+      - edge
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health/ready', timeout=2)"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
+
+  proxy:
+    image: caddy:2.10.2-alpine@sha256:4c6e91c6ed0e2fa03efd5b44747b625fec79bc9cd06ac5235a779726618e530d
+    ports:
+      - "127.0.0.1:${HTTPS_PORT:-8443}:443"
+    volumes:
+      - ./infra/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      app:
+        condition: service_healthy
+    networks:
+      - edge
+    restart: unless-stopped
+
+  tests:
+    profiles: [test]
+    build:
+      context: .
+      target: test
+    environment:
+      APP_VERSION: test
+      DATABASE_HOST: db
+      DATABASE_NAME: appointments_test
+      DATABASE_USER: appointment_app
+      DATABASE_PASSWORD_FILE: /run/secrets/db_app_password
+      PATIENT_ONE_TOKEN_FILE: /run/secrets/patient_one_token
+      PATIENT_TWO_TOKEN_FILE: /run/secrets/patient_two_token
+      STAFF_TOKEN_FILE: /run/secrets/staff_token
+    secrets:
+      - db_app_password
+      - patient_one_token
+      - patient_two_token
+      - staff_token
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - backend
+
+networks:
+  backend:
+    internal: true
+  edge:
+
+volumes:
+  postgres_data:
+  caddy_data:
+  caddy_config:
+
+secrets:
+  db_admin_password:
+    file: ./secrets/db_admin_password
+  db_app_password:
+    file: ./secrets/db_app_password
+  patient_one_token:
+    file: ./secrets/patient_one_token
+  patient_two_token:
+    file: ./secrets/patient_two_token
+  staff_token:
+    file: ./secrets/staff_token
