@@ -23,6 +23,7 @@ jobs:
             chmod 640 "secrets/$name"
           done
           chmod 600 secrets/db_admin_password
+          chmod 644 secrets/db_app_password
           printf 'APP_VERSION=sha-%s\nHTTPS_PORT=8443\nHOST_GID=%s\n' "$GITHUB_SHA" "$(id -g)" > .env
       - name: Build test and runtime images
         run: docker compose build tests app

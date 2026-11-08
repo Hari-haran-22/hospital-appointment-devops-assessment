@@ -10,7 +10,8 @@ for name in db_admin_password db_app_password patient_one_token patient_two_toke
 done
 if [ ! -f .env ]; then cp .env.example .env; fi
 chmod 600 secrets/db_admin_password
-for name in db_app_password patient_one_token patient_two_token staff_token; do
+chmod 644 secrets/db_app_password
+for name in patient_one_token patient_two_token staff_token; do
     chgrp "$(id -g)" "secrets/$name"
     chmod 640 "secrets/$name"
 done

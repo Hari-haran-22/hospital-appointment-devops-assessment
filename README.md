@@ -88,7 +88,7 @@ The [GitHub Actions workflow](.github/workflows/ci.yml) runs formatting, linting
 | `DATABASE_PASSWORD_FILE` | mounted secret | Application database password |
 | `PATIENT_ONE_TOKEN_FILE`, `PATIENT_TWO_TOKEN_FILE`, `STAFF_TOKEN_FILE` | mounted secrets | Demo bearer tokens |
 
-The role and schema are initialized by `infra/init-db.sh` and `infra/schema.sql`. Tests use a separate `appointments_test` database, so their cleanup fixture never touches the live demo database. On Linux, the setup helper grants the app container's group read access to its mounted secret files; CI sets the matching host group ID automatically. App containers receive no PostgreSQL administrator password. Changing the secret file after first database initialization does not rotate the PostgreSQL role; perform a coordinated password rotation in PostgreSQL before updating that file.
+The role and schema are initialized by `infra/init-db.sh` and `infra/schema.sql`. Tests use a separate `appointments_test` database, so their cleanup fixture never touches the live demo database. On Linux, `secrets/` is owner-only on the host; the mounted app password is readable by the database initializer and app, while patient and staff tokens are readable by the app's host group. CI sets the matching host group ID automatically. App containers receive no PostgreSQL administrator password. Changing the secret file after first database initialization does not rotate the PostgreSQL role; perform a coordinated password rotation in PostgreSQL before updating that file.
 
 ## Operations and recovery
 
