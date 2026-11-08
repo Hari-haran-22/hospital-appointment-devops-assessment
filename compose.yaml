@@ -25,6 +25,7 @@ services:
 
   app:
     image: hospital-appointments:${APP_VERSION:-local}
+    user: "10001:${HOST_GID:-10001}"
     build:
       context: .
       target: base
@@ -79,6 +80,7 @@ services:
 
   tests:
     profiles: [test]
+    user: "10001:${HOST_GID:-10001}"
     build:
       context: .
       target: test

@@ -20,9 +20,10 @@ jobs:
           mkdir -m 700 secrets
           for name in db_admin_password db_app_password patient_one_token patient_two_token staff_token; do
             openssl rand -hex 32 > "secrets/$name"
-            chmod 600 "secrets/$name"
+            chmod 640 "secrets/$name"
           done
-          printf 'APP_VERSION=sha-%s\nHTTPS_PORT=8443\n' "$GITHUB_SHA" > .env
+          chmod 600 secrets/db_admin_password
+          printf 'APP_VERSION=sha-%s\nHTTPS_PORT=8443\nHOST_GID=%s\n' "$GITHUB_SHA" "$(id -g)" > .env
       - name: Build test and runtime images
         run: docker compose build tests app
       - name: Start database
