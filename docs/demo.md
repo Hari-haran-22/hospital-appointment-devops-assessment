@@ -11,4 +11,4 @@ Record a 3–5 minute screen capture that proves the deployment and recovery pat
 | 2:45–3:35 | Stop database, show failed health, restart, show recovery | Detection and recovery |
 | 3:35–4:15 | Backup checksum, restore drill results, rollback runbook | Recoverability and documented rollback |
 
-For a local-only submission, say clearly that port 8443 is bound to loopback and the certificate is issued by Caddy's local CA. Put the video URL in the submission form after uploading and verify reviewer access. Do not claim that the CI run, registry digest, or video exists until each has actually been produced.
+For a local-only submission, say clearly that port 8443 is bound to loopback and the certificate is issued by Caddy's local CA. The successful CI run and registry digest are recorded in `evidence/verification.md`. Put the video URL in the submission form after uploading and verify reviewer access.

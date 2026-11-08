@@ -1,6 +1,15 @@
 # Local verification record
 
-These results were observed on 8 November 2026 in a local Docker Desktop deployment. They are local evidence; a GitHub Actions run URL, registry digest, and video link must be added after the candidate publishes the repository and records the demo.
+The local results below were observed on 8 November 2026 in Docker Desktop. The GitHub pipeline evidence was produced after the repository was published. A 3–5 minute demo video still needs to be recorded and linked in the submission form.
+
+## GitHub pipeline and published image
+
+The [verify and publish run](https://github.com/Hari-haran-22/hospital-appointment-devops-assessment/actions/runs/42524057659) completed successfully for commit `65974ff6c01d6c9860138840cefd7591fc2aba46`. Its verify job ran formatting, lint, PostgreSQL-backed API tests, an image build, and a high/critical vulnerability scan. Its publish job pushed the versioned image to GitHub Container Registry.
+
+```text
+Image tag: ghcr.io/hari-haran-22/hospital-appointment-devops-assessment:sha-65974ff6c01d6c9860138840cefd7591fc2aba46
+Digest:    sha256:87edc5ad0aa514140e3a1df417faac23ec5e4d761a96388bf48e8586a76b651f
+```
 
 ## Clean build and API rule
 
