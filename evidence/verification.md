@@ -57,3 +57,5 @@ The backup dump is kept locally under ignored `backups/` and is excluded from th
 ## Video rehearsal on 14 November 2026
 
 The guided `scripts/demo-video.ps1 -Auto` run completed on the local deployment. It showed two simultaneous requests returning HTTP 201 and 409, exactly one confirmed database row, JSON request logs, readiness changing to HTTP 503 during a PostgreSQL outage, and recovery to HTTP 200. It created `backups/demo-20261114-182259.dump` with SHA-256 `F5D199C184629D90BD0B5BACE7A19CCC27FB0C151680F49C29A32DF8A311B0A4`. Final readiness was HTTP 200. This is rehearsal evidence; the required narrated video has not yet been recorded.
+
+The 14 November CI scan detected a fixable high-severity issue in the pinned Alpine base image's `krb5-libs` package. The Dockerfile now upgrades it to `1.22.3-r0`. A fresh local Trivy scan of the rebuilt image reported zero high or critical OS and Python package findings, and all four API tests passed. The rebuilt local service returned HTTP 200 from readiness.

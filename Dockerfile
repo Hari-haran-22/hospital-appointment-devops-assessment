@@ -2,7 +2,8 @@ FROM python:3.12-alpine@sha256:e064671ca452259bab50e8e2c7bd896e39e9a343bb06ca252
 ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 PIP_NO_CACHE_DIR=1 PYTHONPATH=/service
 WORKDIR /service
 COPY requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt \
+RUN apk add --no-cache --upgrade krb5-libs=1.22.3-r0 \
+    && pip install --no-cache-dir -r requirements.txt \
     && addgroup -S -g 10001 app \
     && adduser -S -D -u 10001 -G app app
 COPY app ./app
