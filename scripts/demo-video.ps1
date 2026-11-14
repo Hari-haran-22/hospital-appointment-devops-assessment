@@ -10,7 +10,7 @@ function Check-Exit([string]$Step) {
 
 function Chapter([string]$Title) {
     Write-Output "`n===== $Title ====="
-    if (-not $Auto) { Read-Host 'Press Enter when your recording is ready' | Out-Null }
+    if (-not $Auto) { Read-Host 'Press Enter to run this chapter' | Out-Null }
 }
 
 function Ready-Code {
