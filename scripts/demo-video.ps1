@@ -28,11 +28,14 @@ Write-Output "Current commit: $(git rev-parse HEAD)"
 Chapter '2  Running deployment and HTTPS health'
 docker compose ps
 Check-Exit 'compose status'
-$live = Invoke-RestMethod -Uri 'https://localhost:8443/health/live' -SkipCertificateCheck
-$ready = Invoke-RestMethod -Uri 'https://localhost:8443/health/ready' -SkipCertificateCheck
+$live = curl.exe -s -k https://localhost:8443/health/live | ConvertFrom-Json
+Check-Exit 'liveness request'
+$ready = curl.exe -s -k https://localhost:8443/health/ready | ConvertFrom-Json
+Check-Exit 'readiness request'
 Write-Output "Liveness=$($live.status) version=$($live.version); readiness=$($ready.status)"
-Invoke-RestMethod -Uri 'https://localhost:8443/v1/doctors' -SkipCertificateCheck |
-    Format-Table id, name, specialty -AutoSize
+$doctors = curl.exe -s -k https://localhost:8443/v1/doctors | ConvertFrom-Json
+Check-Exit 'doctor list request'
+$doctors | Format-Table id, name, specialty -AutoSize
 
 Chapter '3  Simultaneous booking rule'
 docker compose --profile test run --rm tests pytest -q -s `

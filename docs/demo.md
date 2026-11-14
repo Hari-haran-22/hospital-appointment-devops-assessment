@@ -6,7 +6,7 @@ Record a single 3–5 minute screen capture with your own narration. Show the br
 
 1. Start Docker Desktop. From the repository root run `docker compose up -d --wait` and `docker compose --profile test build tests`. Confirm `curl.exe -k https://localhost:8443/health/ready` returns `{"status":"ready"}`.
 2. Open the [public repository](https://github.com/Hari-haran-22/hospital-appointment-devops-assessment) and its [Actions page](https://github.com/Hari-haran-22/hospital-appointment-devops-assessment/actions) in your browser. Open the latest successful `verify-and-publish` run. Keep the architecture diagram and `evidence/verification.md` available in tabs.
-3. Use a large terminal font. Start screen and microphone recording with your preferred recorder, then run `./scripts/demo-video.ps1` in PowerShell 7. The script pauses at each chapter so you can switch windows and narrate. `./scripts/demo-video.ps1 -Auto` performs a dry run without pauses; it deliberately stops and restarts the database and creates a local ignored backup.
+3. Use a large terminal font. Start screen and microphone recording with your preferred recorder, then run `./scripts/demo-video.ps1` in Windows PowerShell or PowerShell 7. The script pauses at each chapter so you can switch windows and narrate. `./scripts/demo-video.ps1 -Auto` performs a dry run without pauses; it deliberately stops and restarts the database and creates a local ignored backup.
 
 ## Recording sequence and suggested narration
 
