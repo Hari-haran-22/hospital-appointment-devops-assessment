@@ -53,3 +53,7 @@ RECOVERY readiness_http=200
 ```
 
 The backup dump is kept locally under ignored `backups/` and is excluded from the repository. The runbook describes how a reviewer can repeat the drill and verify the counts.
+
+## Video rehearsal on 14 November 2026
+
+The guided `scripts/demo-video.ps1 -Auto` run completed on the local deployment. It showed two simultaneous requests returning HTTP 201 and 409, exactly one confirmed database row, JSON request logs, readiness changing to HTTP 503 during a PostgreSQL outage, and recovery to HTTP 200. It created `backups/demo-20261114-182259.dump` with SHA-256 `F5D199C184629D90BD0B5BACE7A19CCC27FB0C151680F49C29A32DF8A311B0A4`. Final readiness was HTTP 200. This is rehearsal evidence; the required narrated video has not yet been recorded.

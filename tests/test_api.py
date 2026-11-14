@@ -152,7 +152,8 @@ def test_concurrent_conflict_is_blocked_by_database():
             pool.submit(submit, "P001", config.PATIENT_ONE_TOKEN),
             pool.submit(submit, "P002", config.PATIENT_TWO_TOKEN),
         ]
-        assert sorted(future.result() for future in futures) == [201, 409]
+        statuses = sorted(future.result() for future in futures)
+        assert statuses == [201, 409]
     with db.connection() as conn:
         count = conn.execute(
             "SELECT count(*) AS n FROM appointments "
@@ -160,3 +161,4 @@ def test_concurrent_conflict_is_blocked_by_database():
             (datetime.fromisoformat(slot),),
         ).fetchone()["n"]
     assert count == 1
+    print(f"Concurrent HTTP statuses: {statuses}; confirmed database rows: {count}")

@@ -104,7 +104,7 @@ Backups use PostgreSQL's custom format and are copied outside the container. Res
 
 ## Assessment evidence and limits
 
-`evidence/verification.md` records local command results, a successful GitHub Actions run URL, and the published image digest. Add the 3–5 minute demo video link and final commit ID to the submission form. The [demo plan](docs/demo.md) outlines the recording. The submission deadline is determined by the individualized invitation, which is not present in this repository.
+`evidence/verification.md` records local command results, a successful GitHub Actions run URL, and the published image digest. Add the 3–5 minute demo video link and final commit ID to the submission form. The [demo guide](docs/demo.md) gives narration and timing, and `scripts/demo-video.ps1` runs the on-screen checks. The submission deadline is determined by the individualized invitation, which is not present in this repository.
 
 This MVP has two synthetic patients and two doctors, a fixed weekday schedule, static local tokens, and one app instance in Compose. It does not include patient registration, real patient data, notifications, rate limiting, externally trusted TLS for a public hostname, or automated production deployment. Token rotation, schema migrations after initial deployment, and off-host backup retention would need a production process.
 
